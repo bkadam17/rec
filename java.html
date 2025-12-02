@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Realtime Form Validation</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    input {
+        width: 300px;
+        padding: 8px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        outline: none;
+    }
+
+    input.valid {
+        border-color: green;
+    }
+
+    input.invalid {
+        border-color: red;
+    }
+
+    .message {
+        font-size: 0.9em;
+        color: red;
+        height: 18px;
+    }
+
+    .message.valid {
+        color: green;
+    }
+</style>
+</head>
+<body>
+
+<h2>Realtime Input Validation</h2>
+
+<form id="userForm">
+    <div class="form-group">
+        <label>Email:</label><br>
+        <input type="text" id="email">
+        <div id="emailMsg" class="message"></div>
+    </div>
+
+    <div class="form-group">
+        <label>Password (min 6 chars):</label><br>
+        <input type="password" id="password">
+        <div id="passwordMsg" class="message"></div>
+    </div>
+
+    <div class="form-group">
+        <label>Age (number only):</label><br>
+        <input type="text" id="age">
+        <div id="ageMsg" class="message"></div>
+    </div>
+</form>
+
+<script>
+    // Getting form elements
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    const age = document.getElementById("age");
+
+    const emailMsg = document.getElementById("emailMsg");
+    const passwordMsg = document.getElementById("passwordMsg");
+    const ageMsg = document.getElementById("ageMsg");
+
+    // Email validation
+    email.addEventListener("input", () => {
+        const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (email.value === "") {
+            setInvalid(email, emailMsg, "Email is required");
+        } else if (!pattern.test(email.value)) {
+            setInvalid(email, emailMsg, "Invalid email format");
+        } else {
+            setValid(email, emailMsg, "Looks good!");
+        }
+    });
+
+    // Password validation
+    password.addEventListener("input", () => {
+        if (password.value.length < 6) {
+            setInvalid(password, passwordMsg, "Password too short");
+        } else {
+            setValid(password, passwordMsg, "Strong password");
+        }
+    });
+
+    // Age validation
+    age.addEventListener("input", () => {
+        const onlyNumbers = /^\d+$/;
+
+        if (!onlyNumbers.test(age.value)) {
+            setInvalid(age, ageMsg, "Age must be a number");
+        } else {
+            setValid(age, ageMsg, "Valid age");
+        }
+    });
+
+    // Helper functions
+    function setValid(input, msgElement, message) {
+        input.classList.add("valid");
+        input.classList.remove("invalid");
+        msgElement.textContent = message;
+        msgElement.classList.add("valid");
+    }
+
+    function setInvalid(input, msgElement, message) {
+        input.classList.add("invalid");
+        input.classList.remove("valid");
+        msgElement.textContent = message;
+        msgElement.classList.remove("valid");
+    }
+</script>
+
+</body>
+</html>
